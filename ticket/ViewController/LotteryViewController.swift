@@ -13,18 +13,42 @@ class LotteryViewController: UIViewController {
     
     var event: EventModel!
     
-    
+    @IBOutlet var numberlabel : UILabel!
+    var peopleNumber : Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        name.text = event.name
-        detail.text = event.detail
+//        name.text = event.name
+//        detail.text = event.detail
     }
     
+    @IBAction func onePeopleButton () {
+        peopleNumber = 1
+        
+    }
+    @IBAction func twoPeopleButton () {
+        peopleNumber = 2
+       
+    }
+    @IBAction func threePeopleButton () {
+        peopleNumber = 3
+       
+    }
+    @IBAction func foruPeopleButton () {
+        peopleNumber = 4
+        
+    }
+    @IBAction func fivePeopleButton () {
+        peopleNumber = 5
+       
+    }
+    
+    
+    
     @IBAction func submit() {
-        let lottery = LotteryModel(people_number: 3, event_id: event.id, device_id: "123")
+        let lottery = LotteryModel(people_number: peopleNumber, event_id: event.id, device_id: DeviceIDManager().deviceId)
         
         Task {
             do {
@@ -37,15 +61,5 @@ class LotteryViewController: UIViewController {
             }
         }
     }
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destination.
-     // Pass the selected object to the new view controller.
-     }
-     */
     
 }
