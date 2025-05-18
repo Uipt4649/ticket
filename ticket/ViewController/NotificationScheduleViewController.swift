@@ -9,15 +9,15 @@ import UIKit
 
 class NotificationScheduleViewController: UIViewController {
     
-        
-        override func viewDidLoad() {
-            super.viewDidLoad()
-        }
-        @IBAction func completionButton() {
-            self.dismiss(animated: true, completion: nil)
-        }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
     }
-    
-    
-    
+    @IBAction func completionButton() {
+        self.dismiss(animated: true, completion: nil)
+    }
+}
+
+
+
 
