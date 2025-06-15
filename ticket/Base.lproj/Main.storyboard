@@ -181,9 +181,17 @@
                                 <rect key="frame" x="646" y="373" width="99" height="60"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <attributedString key="attributedText">
-                                    <fragment content="演劇部">
+                                    <fragment content="xx">
                                         <attributes>
                                             <font key="NSFont" size="33" name="MuktaMahee-Bold"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="部">
+                                        <attributes>
+                                            <font key="NSFont" size="33" name="HiraginoSans-W6"/>
+                                            <font key="NSOriginalFont" size="33" name="MuktaMahee-Bold"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                         </attributes>
                                     </fragment>
                                 </attributedString>
@@ -193,9 +201,26 @@
                                 <rect key="frame" x="646" y="490" width="290" height="60"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <attributedString key="attributedText">
-                                    <fragment content="1F 記念講堂 指定席">
+                                    <fragment content="1F ">
                                         <attributes>
                                             <font key="NSFont" size="33" name="MuktaMahee-Bold"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="記念講堂">
+                                        <attributes>
+                                            <font key="NSFont" size="33" name="HiraginoSans-W6"/>
+                                            <font key="NSOriginalFont" size="33" name="MuktaMahee-Bold"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content=" ">
+                                        <attributes>
+                                            <font key="NSFont" size="33" name="MuktaMahee-Bold"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="指定席">
+                                        <attributes>
+                                            <font key="NSFont" size="33" name="HiraginoSans-W6"/>
+                                            <font key="NSOriginalFont" size="33" name="MuktaMahee-Bold"/>
                                         </attributes>
                                     </fragment>
                                 </attributedString>
@@ -320,9 +345,15 @@
                                 <rect key="frame" x="548" y="237" width="757" height="85"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <attributedString key="attributedText">
-                                    <fragment content="演劇部 2025 文化祭公演「〇〇〇〇」">
+                                    <fragment content="2025 ">
                                         <attributes>
                                             <font key="NSFont" size="43" name="MuktaMahee-Bold"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="文化祭公演「〇〇〇〇」">
+                                        <attributes>
+                                            <font key="NSFont" size="43" name="HiraginoSans-W6"/>
+                                            <font key="NSOriginalFont" size="43" name="MuktaMahee-Bold"/>
                                         </attributes>
                                     </fragment>
                                 </attributedString>
@@ -345,6 +376,10 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="" image="person.text.rectangle" catalog="system" selectedImage="person.text.rectangle.fill" id="fXC-xz-Efh"/>
                     <navigationItem key="navigationItem" id="Twx-7I-CQ7"/>
+                    <connections>
+                        <outlet property="performerLabel" destination="4AM-fE-zVI" id="WBy-WM-mCj"/>
+                        <outlet property="seatButton" destination="oMO-Vn-bxf" id="EMz-eo-XAM"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MxI-EZ-RFq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

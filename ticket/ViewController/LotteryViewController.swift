@@ -23,6 +23,7 @@ class LotteryViewController: UIViewController, UITextFieldDelegate {
         // Do any additional setup after loading the view.
         //        name.text = event.name
         //        detail.text = event.detail
+        
     }
     
     @IBAction func completionButton() {
@@ -137,8 +138,20 @@ class LotteryViewController: UIViewController, UITextFieldDelegate {
         //Yesボタン
         reservationAlert.addAction(
             
-            
             UIAlertAction(title: "Yes",style: .default,handler: { (action) in
+                        
+                let lottery = LotteryModel(people_number: self.peopleNumber, event_id: 2, device_id:  DeviceIDManager().deviceId, seat_col: nil, seat_row: nil)
+                
+                 Task {
+                 do {
+                 try await supabase.from("lottery")
+                                   .insert(lottery)
+                                   .execute()
+                                   } catch {
+                                     dump(error)
+                                  }
+                               }
+                
                 self.performSegue(withIdentifier: "ToNotificationSchedule", sender: nil)
             })
         )

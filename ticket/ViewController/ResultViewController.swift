@@ -38,6 +38,7 @@ class ResultViewController: UIViewController, UITableViewDataSource, UITableView
         if segue.identifier == "toWinView" {
             let row = tableView.indexPathForSelectedRow?.row
             let vc = segue.destination as! TicketDisplayViewController
+            vc.lottery = results[row!]
         }
         if segue.identifier == "toFalseView" {
             let row = tableView.indexPathForSelectedRow?.row

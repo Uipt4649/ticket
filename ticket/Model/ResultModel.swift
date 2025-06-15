@@ -7,10 +7,12 @@
 
 import Foundation
 
-struct ResultModel: Decodable, Identifiable {
+struct ResultModel: Decodable, Identifiable, Encodable {
     let id: Int
     let device_id: String
     let people_number: Int
     let event_id: Int
     let is_win: Bool
+    var seat_col: [String]?
+    var seat_row: [String]?
 }
