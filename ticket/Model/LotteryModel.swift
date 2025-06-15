@@ -11,4 +11,6 @@ struct LotteryModel: Encodable {
     let people_number: Int
     let event_id: Int
     let device_id: String
+    let seat_col: String
+    let seat_row: String
 }

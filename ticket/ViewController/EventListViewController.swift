@@ -7,20 +7,27 @@
 
 import UIKit
 
-class EventListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class EventListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
     
     @IBOutlet var tableView: UITableView!
+    @IBOutlet var searchBar: UISearchBar!
     var events: [EventModel] = []
+    var searchResults:[EventModel] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         tableView.dataSource = self
         tableView.delegate = self
+        searchBar.delegate = self
+
         
         Task {
             do {
-                events = try await supabase.from("events").select().execute().value
+                events = try await supabase
+                    .from("events")
+                    .select()
+                    .execute().value
                 tableView.reloadData()
             } catch {
                 dump(error)
@@ -37,16 +44,55 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return events.count
+        if searchBar.text != "" {
+            return searchResults.count
+        } else {
+            return events.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let cell: UITableViewCell = tableView.dequeueReusableCell(
+            withIdentifier: "cell",
+            for: indexPath
+        )
         var content = cell.defaultContentConfiguration()
-        content.text = events[indexPath.row].name
-        content.secondaryText = events[indexPath.row].detail
+        if searchBar.text != "" {
+            content.text = searchResults[indexPath.row].name
+            content.secondaryText = searchResults[indexPath.row].detail
+        } else {
+            content.text = events[indexPath.row].name
+            content.secondaryText = events[indexPath.row].detail
+        }
+
         cell.contentConfiguration = content
         return cell
+    }
+    
+    // 検索ボタンが押された時に呼ばれる
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        self.view.endEditing(true)
+        searchBar.showsCancelButton = true
+        self.searchResults = events.filter{
+            // 大文字と小文字を区別せずに検索
+            $0.name.lowercased().contains(searchBar.text!.lowercased())
+        }
+        self.tableView.reloadData()
+    }
+    
+    // キャンセルボタンが押された時に呼ばれる
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.showsCancelButton = false
+        self.view.endEditing(true)
+        searchBar.text = ""
+        self.tableView.reloadData()
+    }
+        
+    
+    // テキストフィールド入力開始前に呼ばれる
+    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+        searchBar.showsCancelButton = true
+        return true
     }
     
 }

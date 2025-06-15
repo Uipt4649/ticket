@@ -2,58 +2,44 @@
 //  SeatSelectViewController.swift
 //  ticket
 //
-//  Created by 渡邉羽唯 on 2025/04/27.
+//  Created by 渡邉羽唯 on 2025/06/01.
 //
 
 import UIKit
 
 class SeatSelectViewController: UIViewController {
     
-    @IBOutlet var doorImageViewFront: UIImageView!
-    @IBOutlet var doorImageViewBack: UIImageView!
-    
-    private var seatMatrix: Seat = Seat(line: .A, column: 15)
+    var seats: [Seat] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        if seatMatrix.column <= threshold(line: seatMatrix.line) {
-            //前のドアを赤く
-            doorImageViewFront.tintColor = .red
-            doorImageViewBack.tintColor = .clear //後ろはもとの色にもどす
-        } else {
-            //後ろのドアを赤く
-            doorImageViewBack.tintColor = .red
-            doorImageViewFront.tintColor = .clear  //前はもとの色にもどす
-        }
+
+        // Do any additional setup after loading the view.
     }
     
-    @IBAction func completionButton() {
-        self.dismiss(animated: true, completion: nil)
-    }
+    @IBAction func A3 () {
+//        Task {
+//            do {
+//                events = try await supabase
+//                    .from("events")
+//                    .select()
+//                    .execute().value
+//                tableView.reloadData()
+//            } catch {
+//                dump(error)
+//            }
+//            
+//        }
     
-    private func threshold(line: Seat.Line) -> Int {
-        switch line {
-        case .A:
-            return 12
-        case .B:
-            return 12
-        case .C:
-            return 12
-        case .D, .E, .F, .G, .H, .I, .J, .K, .L, .M, .N, .O:
-            return 12
-        case .P:
-            return 10
-        }
     }
-}
+    /*
+    // MARK: - Navigation
 
-struct Seat {
-    let line: Line
-    let column: Int
-
-    enum Line {
-        case A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destination.
+        // Pass the selected object to the new view controller.
     }
-}
+    */
 
+}

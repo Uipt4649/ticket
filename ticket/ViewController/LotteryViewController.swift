@@ -29,71 +29,37 @@ class LotteryViewController: UIViewController, UITextFieldDelegate {
             self.dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func onePeopleButton () {
-        peopleNumber = 1
-        
-        
-    }
-    @IBAction func twoPeopleButton () {
-        peopleNumber = 2
-        
-    }
-    @IBAction func threePeopleButton () {
-        peopleNumber = 3
-        
-    }
-    @IBAction func foruPeopleButton () {
-        peopleNumber = 4
-        
-    }
-    @IBAction func fivePeopleButton () {
-        peopleNumber = 5
-    }
     
-    
-    @IBAction func submit() {
-        //let lottery = LotteryModel(people_number: peopleNumber, event_id: event.id, device_id: DeviceIDManager().deviceId)
-        
-        guard let eventId = event?.id else {
-            print("Error: event.id is nil")
-            return
-        }
-        let deviceId = DeviceIDManager().deviceId
-        
-        //guard let eventId = event?.id, let deviceId = DeviceIDManager().deviceId else {
-        //print("Error: event.id or deviceId is nil")
-        //return
-        //}
-        var text: String = ""
-        var _: String? = text
-        
-        let lottery = LotteryModel(people_number: peopleNumber, event_id: event.id, device_id:  DeviceIDManager().deviceId)
-        
-        
-        Task {
-            do {
-                try await supabase
-                    .from("lottery")
-                    .insert(lottery)
-                    .execute()
-            } catch {
-                dump(error)
-            }
-        }
-        
-        
-        
-        Task {
-            do {
-                try await supabase
-                    .from("lottery")
-                    .insert(lottery)
-                    .execute()
-            } catch {
-                dump(error)
-            }
-        }
-    }
+//    @IBAction func submit() {
+//        //let lottery = LotteryModel(people_number: peopleNumber, event_id: event.id, device_id: DeviceIDManager().deviceId)
+//        
+//        guard let eventId = event?.id else {
+//            print("Error: event.id is nil")
+//            return
+//        }
+//        let deviceId = DeviceIDManager().deviceId
+//        
+//        //guard let eventId = event?.id, let deviceId = DeviceIDManager().deviceId else {
+//        //print("Error: event.id or deviceId is nil")
+//        //return
+//        //}
+//        var text: String = ""
+//        var _: String? = text
+//        
+//        let lottery = LotteryModel(people_number: peopleNumber, event_id: event.id, device_id:  DeviceIDManager().deviceId)
+//        
+//        
+//        Task {
+//            do {
+//                try await supabase
+//                    .from("lottery")
+//                    .insert(lottery)
+//                    .execute()
+//            } catch {
+//                dump(error)
+//            }
+//        }
+//    }
     
     @IBAction func aleat(_ senter: Any) {
         //これはー最初のアラートだよー
@@ -170,6 +136,8 @@ class LotteryViewController: UIViewController, UITextFieldDelegate {
         
         //Yesボタン
         reservationAlert.addAction(
+            
+            
             UIAlertAction(title: "Yes",style: .default,handler: { (action) in
                 self.performSegue(withIdentifier: "ToNotificationSchedule", sender: nil)
             })

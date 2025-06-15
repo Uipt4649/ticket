@@ -7,6 +7,4 @@
 
 import Foundation
 
-struct SeatSelectModel: Encodable {
-    var seatMatrix: Int
-}
+
