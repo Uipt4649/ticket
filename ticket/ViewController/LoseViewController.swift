@@ -12,7 +12,7 @@ class LoseViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     @IBOutlet var horizontalCollectionView: UICollectionView!
     
-    var events: [EventModel] = [EventModel(id: 1, name: "aaa", detail: "aaa")]
+    var events: [EventModel] = []
 
     
     @IBAction func backBUttom() {
@@ -33,7 +33,6 @@ class LoseViewController: UIViewController, UICollectionViewDelegate, UICollecti
         Task {
             do {
                 events = try await supabase.from("events").select().execute().value
-                print(events)  // ← 確認用
 
                 horizontalCollectionView.reloadData()
             } catch {

@@ -12,7 +12,7 @@ class SeatShowViewController: UIViewController {
     @IBOutlet var doorImageViewFront: UIImageView!
     @IBOutlet var doorImageViewBack: UIImageView!
     
-    private var seatMatrix: Seat = Seat(line: .A, column: 15)
+    var seatMatrix: Seat!
     
     override func viewDidLoad() {
         super.viewDidLoad()

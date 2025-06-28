@@ -39,7 +39,13 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         if segue.identifier == "toLotteryView" {
             let row = tableView.indexPathForSelectedRow?.row
             let vc = segue.destination as! LotteryViewController
-            vc.event = events[row!]
+            
+            // 検索結果が表示されている場合はsearchResultsから、そうでなければeventsから取得
+            if searchBar.text != "" && !searchResults.isEmpty {
+                vc.event = searchResults[row!]
+            } else {
+                vc.event = events[row!]
+            }
         }
     }
     

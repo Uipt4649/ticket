@@ -15,4 +15,5 @@ struct ResultModel: Decodable, Identifiable, Encodable {
     let is_win: Bool
     var seat_col: [String]?
     var seat_row: [String]?
+    var events: EventModel? // JOIN用
 }

@@ -14,15 +14,22 @@ class LotteryViewController: UIViewController, UITextFieldDelegate {
     
     var event: EventModel!
     
-    @IBOutlet var numberlabel : UILabel!
     var peopleNumber : Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        print("DEBUG: LotteryViewController viewDidLoad")
+        print("DEBUG: event = \(event?.name ?? "nil")")
+        
         // Do any additional setup after loading the view.
-        //        name.text = event.name
-        //        detail.text = event.detail
+        if let event = self.event {
+            name.text = event.name
+            detail.text = event.detail
+            print("DEBUG: UI updated with event name: \(event.name)")
+        } else {
+            print("DEBUG: event is nil, UI not updated")
+        }
         
     }
     
@@ -30,65 +37,29 @@ class LotteryViewController: UIViewController, UITextFieldDelegate {
             self.dismiss(animated: true, completion: nil)
     }
     
-    
-//    @IBAction func submit() {
-//        //let lottery = LotteryModel(people_number: peopleNumber, event_id: event.id, device_id: DeviceIDManager().deviceId)
-//        
-//        guard let eventId = event?.id else {
-//            print("Error: event.id is nil")
-//            return
-//        }
-//        let deviceId = DeviceIDManager().deviceId
-//        
-//        //guard let eventId = event?.id, let deviceId = DeviceIDManager().deviceId else {
-//        //print("Error: event.id or deviceId is nil")
-//        //return
-//        //}
-//        var text: String = ""
-//        var _: String? = text
-//        
-//        let lottery = LotteryModel(people_number: peopleNumber, event_id: event.id, device_id:  DeviceIDManager().deviceId)
-//        
-//        
-//        Task {
-//            do {
-//                try await supabase
-//                    .from("lottery")
-//                    .insert(lottery)
-//                    .execute()
-//            } catch {
-//                dump(error)
-//            }
-//        }
-//    }
-    
     @IBAction func aleat(_ senter: Any) {
         //これはー最初のアラートだよー
         let alert = UIAlertController(title: "自由人数選択", message: "鑑賞人数入力してください", preferredStyle: .alert)
         
         alert.addTextField(configurationHandler: {(textField) -> Void in
             textField.delegate = self
+            textField.keyboardType = .numberPad
         })
-        
         
         //追加ボタン
         alert.addAction(UIAlertAction(title: "追加", style: .default, handler: { (action) in
             if let textFields = alert.textFields, let inputText = textFields.first?.text {
                 print("入力されたテキスト")
-                let _: String = String()
                 
                 if let peopleNumber = Int(inputText){
+                    self.peopleNumber = peopleNumber
                     print(peopleNumber)
                 }
             }
-//            let action: String? = nil
-//            guard action != nil else { return }
             self.showConfirmationAlert()
             
         })
         )
-        
-
         
         //キャンセルボタン
         alert.addAction(
@@ -96,10 +67,9 @@ class LotteryViewController: UIViewController, UITextFieldDelegate {
                 title:"キャンセル",
                 style: .cancel,
                 handler: {(action) -> Void in
-                    
-                    
                 })
         )
+        
         //アラートが表示されるところにprint
         self.present(
             alert,
@@ -107,51 +77,39 @@ class LotteryViewController: UIViewController, UITextFieldDelegate {
             completion: {
                 print("アラートが表示された")
             })
-        
-        //最初のアラートが追加を押されたら１つめのアラートを閉じて２つ目のアラートが出現
-        self.present(alert, animated: true, completion: {
-            print("人数選択アラートが表示された")
-        })
     }
-    
-    
-    var reservationAlert: UIAlertController!
-    
-    @IBAction func reservationAler(_ peopleNumber: Int) {
-        
-        
-    }
-    
-    
-    
     
     //ここから２つ目のアラートその他の時
     func showConfirmationAlert() {
+        print("DEBUG: showConfirmationAlert called")
+        print("DEBUG: self.event = \(self.event?.name ?? "nil")")
         
+        // eventがnilの場合はエラーアラートを表示
+        guard let event = self.event else {
+            print("DEBUG: event is nil, showing error alert")
+            let errorAlert = UIAlertController(title: "エラー", message: "イベント情報が取得できませんでした", preferredStyle: .alert)
+            errorAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(errorAlert, animated: true, completion: nil)
+            return
+        }
+        
+        print("DEBUG: event is not nil, proceeding with confirmation")
         let reservationAlert = UIAlertController(title: "確認", message: "予約を確定しますか？", preferredStyle: .alert)
-        
-        //alert.addTextField(configurationHandler: {(textField) -> Void in
-        //textField.delegate = self
-        // })
-        
-        
         //Yesボタン
         reservationAlert.addAction(
-            
             UIAlertAction(title: "Yes",style: .default,handler: { (action) in
-                        
-                let lottery = LotteryModel(people_number: self.peopleNumber, event_id: 2, device_id:  DeviceIDManager().deviceId, seat_col: nil, seat_row: nil)
+                let lottery = LotteryModel(people_number: self.peopleNumber, event_id: event.id, device_id:  DeviceIDManager().deviceId, seat_col: nil, seat_row: nil)
                 
-                 Task {
-                 do {
-                 try await supabase.from("lottery")
-                                   .insert(lottery)
-                                   .execute()
-                                   } catch {
-                                     dump(error)
-                                  }
-                               }
-                
+                Task {
+                    do {
+                        try await supabase
+                            .from("lottery")
+                            .insert(lottery)
+                            .execute()
+                    } catch {
+                        dump(error)
+                    }
+                }
                 self.performSegue(withIdentifier: "ToNotificationSchedule", sender: nil)
             })
         )
@@ -162,10 +120,10 @@ class LotteryViewController: UIViewController, UITextFieldDelegate {
                 title:"No",
                 style: .cancel,
                 handler: {(action) -> Void in
-                    
                 }
             )
         )
+        
         //アラートが表示されるところにprint
         self.present(
             reservationAlert,
@@ -173,11 +131,6 @@ class LotteryViewController: UIViewController, UITextFieldDelegate {
             completion: {
                 print("アラートが表示された")
             })
-        
-        
-        func alert(_ msg:Int){
-            print(msg)
-        }
     }
 }
 

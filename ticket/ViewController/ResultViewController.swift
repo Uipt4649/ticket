@@ -16,17 +16,18 @@ class ResultViewController: UIViewController, UITableViewDataSource, UITableView
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.dataSource = self
         tableView.delegate = self
+        tableView.dataSource = self
         
         Task {
             do {
-                results = try await
-                supabase.from("lottery")
-                    .select()
+                let results: [ResultModel] = try await supabase.from("lottery")
+                    .select("*, events(id, name, detail)")
                     .eq("device_id", value: DeviceIDManager().deviceId)
                     .execute()
                     .value
+
+                self.results = results
                 tableView.reloadData()
             } catch {
                 dump(error)
@@ -41,8 +42,8 @@ class ResultViewController: UIViewController, UITableViewDataSource, UITableView
             vc.lottery = results[row!]
         }
         if segue.identifier == "toFalseView" {
-            let row = tableView.indexPathForSelectedRow?.row
-            let vc = segue.destination as! LoseViewController
+            let _ = tableView.indexPathForSelectedRow?.row
+            let _ = segue.destination as! LoseViewController
         }
     }
     
@@ -52,7 +53,7 @@ class ResultViewController: UIViewController, UITableViewDataSource, UITableView
             // 当選の時
             performSegue(withIdentifier: "toWinView", sender: self)
         } else {
-            //落選の時
+            // 落選の時
             performSegue(withIdentifier: "toFalseView", sender: self)
         }
     }
@@ -68,9 +69,7 @@ class ResultViewController: UIViewController, UITableViewDataSource, UITableView
                 .dequeueReusableCell(withIdentifier: "cell", for: indexPath)
             var content =
             cell.defaultContentConfiguration()
-            content.text =
-            results[indexPath.row].device_id
-            content.secondaryText = String(results[indexPath.row].is_win)
+            content.text = results[indexPath.row].events?.name ?? "イベント名なし"
             cell.contentConfiguration = content
             return cell
         }
