@@ -11,4 +11,7 @@ struct EventModel: Decodable, Identifiable, Encodable {
     let id: Int
     let name: String
     let detail: String
+    let event_start_date: Date
+    let event_open_date: Date
+    let event_closing_date: Date
 }

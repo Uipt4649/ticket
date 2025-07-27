@@ -22,7 +22,7 @@ class ResultViewController: UIViewController, UITableViewDataSource, UITableView
         Task {
             do {
                 let results: [ResultModel] = try await supabase.from("lottery")
-                    .select("*, events(id, name, detail)")
+                    .select("*, events(id, name, detail, event_start_date, event_open_date, event_closing_date)")
                     .eq("device_id", value: DeviceIDManager().deviceId)
                     .execute()
                     .value

@@ -12,12 +12,40 @@ class TicketDisplayViewController: UIViewController {
     var lottery: ResultModel!
     
     @IBOutlet var performerLabel: UILabel!
+    @IBOutlet var dateLabel: UILabel!
+    @IBOutlet var startLabel: UILabel!
+    @IBOutlet var openLabel: UILabel!
+    @IBOutlet var closingLabel: UILabel!
+
+    
     @IBOutlet var seatButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         performerLabel.text = lottery.events?.name
+        let date: Date = lottery.events?.event_start_date ?? Date()
+        let formatter = DateFormatter()
+        
+        formatter.dateFormat = "yyyy年MM月dd日"
+        dateLabel.text = formatter.string(from: date)
+        
+        formatter.dateFormat = "HH:mm"
+        startLabel.text = formatter.string(from: date)
+        
+        
+        performerLabel.text = lottery.events?.name
+        let date_1: Date = lottery.events?.event_open_date ?? Date()
+        let formatter_1 = DateFormatter()
+        formatter_1.dateFormat = "HH:mm + 10"
+        openLabel.text = formatter.string(from: date)
+        
+        performerLabel.text = lottery.events?.name
+        let date_2: Date = lottery.events?.event_closing_date ?? Date()
+        let formatter_2 = DateFormatter()
+        formatter_2.dateFormat = "HH:mm"
+        closingLabel.text = formatter.string(from: date)
+
         
         // 座席情報を安全にアンラップして表示
         if let seatCol = lottery.seat_col, let seatRow = lottery.seat_row,

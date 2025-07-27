@@ -10,5 +10,4 @@ import UIKit
 class LoseCollectionViewCell: UICollectionViewCell {
     @IBOutlet var titlelabel: UILabel!
     @IBOutlet var detailabel: UILabel!
-    @IBOutlet var ImageView: UIImageView!
 }

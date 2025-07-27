@@ -53,8 +53,6 @@ class LoseViewController: UIViewController, UICollectionViewDelegate, UICollecti
         let event = events[indexPath.row]
                 cell.titlelabel.text = event.name
                 cell.detailabel.text = event.detail
-        cell.ImageView.image = UIImage()
-
         return cell
 
     }
