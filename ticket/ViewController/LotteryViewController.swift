@@ -110,7 +110,7 @@ class LotteryViewController: UIViewController, UITextFieldDelegate {
                         dump(error)
                     }
                 }
-                self.performSegue(withIdentifier: "ToNotificationSchedule", sender: nil)
+                //self.performSegue(withIdentifier: "ToNotificationSchedule", sender: nil)
             })
         )
         
