@@ -11,6 +11,7 @@ import SwiftUICore
 class LotteryViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet var name: UILabel!
     @IBOutlet var detail: UITextView!
+    @IBOutlet var image: UIImageView!
     
     var event: EventModel!
     
@@ -26,6 +27,7 @@ class LotteryViewController: UIViewController, UITextFieldDelegate {
         if let event = self.event {
             name.text = event.name
             detail.text = event.detail
+            image.image = getImageByUrl(url: event.image_url)
             print("DEBUG: UI updated with event name: \(event.name)")
         } else {
             print("DEBUG: event is nil, UI not updated")
@@ -134,3 +136,13 @@ class LotteryViewController: UIViewController, UITextFieldDelegate {
     }
 }
 
+func getImageByUrl(url: String) -> UIImage{
+    let url = URL(string: url)
+    do {
+        let data = try Data(contentsOf: url!)
+        return UIImage(data: data)!
+    } catch let err {
+        print("Error : \(err.localizedDescription)")
+    }
+    return UIImage()
+}

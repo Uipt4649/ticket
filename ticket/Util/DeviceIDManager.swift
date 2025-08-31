@@ -2,7 +2,7 @@
 //  DeviceIDManager.swift
 //  ticket
 //
-//  Created by 大場史温 on 2025/02/17.
+//  Created by 渡邉羽唯 on 2025/02/17.
 //
 
 import Foundation

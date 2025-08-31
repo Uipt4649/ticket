@@ -14,4 +14,5 @@ struct EventModel: Decodable, Identifiable, Encodable {
     let event_start_date: Date
     let event_open_date: Date
     let event_closing_date: Date
+    let image_url: String
 }
