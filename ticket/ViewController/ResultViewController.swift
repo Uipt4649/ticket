@@ -16,17 +16,19 @@ class ResultViewController: UIViewController, UITableViewDataSource, UITableView
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let deviceId = UIDevice.current.identifierForVendor!.uuidString
+        print(deviceId)
+        
         tableView.delegate = self
         tableView.dataSource = self
         
         Task {
             do {
                 let results: [ResultModel] = try await supabase.from("lottery")
-                    .select("*, events(id, name, detail, event_start_date, event_open_date, event_closing_date)")
+                    .select("*, events(id, name, detail, event_start_date, event_open_date, event_closing_date, image_url)")
                     .eq("device_id", value: DeviceIDManager().deviceId)
                     .execute()
                     .value
-
                 self.results = results
                 tableView.reloadData()
             } catch {

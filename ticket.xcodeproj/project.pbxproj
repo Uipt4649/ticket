@@ -239,6 +239,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				150F30182D619381002FFF9C /* XCRemoteSwiftPackageReference "supabase-swift" */,
+				15A356D12E765ABE0036522F /* XCRemoteSwiftPackageReference "SwiftEasyUIKit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 150F2FE32D617E61002FFF9C /* Products */;
@@ -605,6 +606,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 2.5.1;
+			};
+		};
+		15A356D12E765ABE0036522F /* XCRemoteSwiftPackageReference "SwiftEasyUIKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ObaShion/SwiftEasyUIKit";
+			requirement = {
+				branch = main;
+				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

@@ -7,99 +7,63 @@
 
 import UIKit
 
-class EventListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
-    
-    @IBOutlet var tableView: UITableView!
-    @IBOutlet var searchBar: UISearchBar!
+class EventListViewController: UIViewController {
     var events: [EventModel] = []
-    var searchResults:[EventModel] = []
-    
+    private var childVC: NFViewController?
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        tableView.dataSource = self
-        tableView.delegate = self
-        searchBar.delegate = self
-
-        
         Task {
-            do {
-                events = try await supabase
-                    .from("events")
-                    .select()
-                    .execute().value
-                tableView.reloadData()
-            } catch {
-                dump(error)
+            await loadEvents()
+        }
+    }
+    private func loadEvents() async {
+        do {
+            events = try await supabase
+                .from("events")
+                .select()
+                .execute().value
+            setupChildVC()
+        } catch {
+            dump(error)
+        }
+    }
+    private func setupChildVC() {
+        let childVC = NFViewController(
+            nfHeroHeaderItem: events.map { event in
+                NFHeroHeaderItem(title: event.name, image: getImageByUrl(url: event.image_url))
+            },
+            nfCollectionItem: events.map { event in
+                NFCollectionItem(title: event.name, description: event.detail, image: getImageByUrl(url: event.image_url))
+            },
+            nfSectionTitle: "出し物一覧"
+            ,
+            onSelectItem: { [weak self] item in
+                guard let self = self else { return }
+                if let event = self.events.first(where: { $0.name == item.title }) {
+                    self.performSegue(withIdentifier: "toLotteryView", sender: event)
+                }
             }
-        }
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "toLotteryView" {
-            let row = tableView.indexPathForSelectedRow?.row
-            let vc = segue.destination as! LotteryViewController
-            
-            // 検索結果が表示されている場合はsearchResultsから、そうでなければeventsから取得
-            if searchBar.text != "" && !searchResults.isEmpty {
-                vc.event = searchResults[row!]
-            } else {
-                vc.event = events[row!]
-            }
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if searchBar.text != "" {
-            return searchResults.count
-        } else {
-            return events.count
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: UITableViewCell = tableView.dequeueReusableCell(
-            withIdentifier: "cell",
-            for: indexPath
         )
-        var content = cell.defaultContentConfiguration()
-        if searchBar.text != "" {
-            content.text = searchResults[indexPath.row].name
-            content.secondaryText = searchResults[indexPath.row].detail
-        } else {
-            content.text = events[indexPath.row].name
-            content.secondaryText = events[indexPath.row].detail
+        self.childVC?.willMove(toParent: nil)
+        self.childVC?.view.removeFromSuperview()
+        self.childVC?.removeFromParent()
+        self.childVC = childVC
+        self.addChild(childVC)
+        self.view.addSubview(childVC.view)
+        childVC.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            childVC.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            childVC.view.topAnchor.constraint(equalTo: self.view.topAnchor),
+            childVC.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            childVC.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+        ])
+        childVC.didMove(toParent: self)
+    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toLotteryView",
+           let event = sender as? EventModel,
+           let vc = segue.destination as? LotteryViewController {
+            vc.event = event
         }
-
-        cell.contentConfiguration = content
-        return cell
     }
-    
-    // 検索ボタンが押された時に呼ばれる
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        self.view.endEditing(true)
-        searchBar.showsCancelButton = true
-        self.searchResults = events.filter{
-            // 大文字と小文字を区別せずに検索
-            $0.name.lowercased().contains(searchBar.text!.lowercased())
-        }
-        self.tableView.reloadData()
-    }
-    
-    // キャンセルボタンが押された時に呼ばれる
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.showsCancelButton = false
-        self.view.endEditing(true)
-        searchBar.text = ""
-        self.tableView.reloadData()
-    }
-        
-    
-    // テキストフィールド入力開始前に呼ばれる
-    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
-        searchBar.showsCancelButton = true
-        return true
-    }
-    
 }
-
